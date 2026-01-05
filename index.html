@@ -5,96 +5,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Supreme's Portfolio</title>
 
-<!-- Fonts & Icons -->
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&family=Pacifico&display=swap" rel="stylesheet">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Roboto, sans-serif;
     background: #f0f4f8;
+    margin: 0;
     color: #333;
 }
 
-/* Header */
 header {
-    position: fixed;
-    top: 0;
-    width: 100%;
     background: white;
-    padding: 15px 0;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
 header h1 {
-    font-family: 'Pacifico', cursive;
+    font-family: Pacifico, cursive;
     color: #ff6f61;
-    text-align: center;
-}
-
-nav {
-    text-align: center;
-    margin-top: 10px;
+    margin: 0;
 }
 
 nav a {
-    color: #ff6f61;
+    margin: 0 10px;
     text-decoration: none;
-    margin: 0 15px;
+    color: #ff6f61;
     font-weight: bold;
 }
 
-/* Sections */
 section {
-    max-width: 900px;
+    max-width: 800px;
     margin: auto;
     padding: 120px 20px 60px;
     text-align: center;
 }
 
-section h2 {
+h2 {
     color: #ff6f61;
-    margin-bottom: 20px;
 }
 
-.cards {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.card {
-    background: #ffecd2;
-    padding: 20px;
-    border-radius: 15px;
-    width: 260px;
-}
-
-/* Mini Game */
 .game-box {
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.game-box button {
-    padding: 10px 20px;
+input {
+    padding: 8px;
+    font-size: 16px;
+    width: 100px;
+}
+
+button {
+    padding: 8px 15px;
     font-size: 16px;
     background: #ff6f61;
-    border: none;
     color: white;
-    border-radius: 8px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: 20px;
@@ -109,8 +85,7 @@ footer {
     <h1>Supreme</h1>
     <nav>
         <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#game">Mini Game</a>
+        <a href="#game">Game</a>
         <a href="#contact">Contact</a>
     </nav>
 </header>
@@ -118,36 +93,28 @@ footer {
 <section id="about">
     <h2>About Me</h2>
     <p>
-        Hello! I'm Supreme, a student at Kantipur Engineering College.
-        I'm learning web development and building small projects to grow my skills.
+        Hi, I'm Supreme, a student at Kantipur Engineering College learning web development.
     </p>
 </section>
 
-<section id="projects">
-    <h2>Projects</h2>
-    <div class="cards">
-        <div class="card">
-            <i class="fas fa-code"></i>
-            <h3>Beginner Projects</h3>
-            <p>Learning HTML, CSS, and JavaScript step by step.</p>
-        </div>
-    </div>
-</section>
-
 <section id="game">
-    <h2>Mini Game 🎮</h2>
+    <h2>Number Guessing Game 🎯</h2>
     <div class="game-box">
-        <p>Click the button as many times as you can!</p>
-        <h3>Score: <span id="score">0</span></h3>
-        <button onclick="increaseScore()">Click Me</button>
+        <p>Guess a number between <b>0 and 100</b></p>
+        <p>You have <b>5 guesses</b></p>
+
+        <input type="number" id="guess" min="0" max="100">
+        <button onclick="checkGuess()">Guess</button>
+
         <p id="message"></p>
+        <p>Guesses left: <span id="left">5</span></p>
     </div>
 </section>
 
 <section id="contact">
     <h2>Contact</h2>
-    <p>Email: <a href="mailto:adhikarisupreme36@gmail.com">adhikarisupreme36@gmail.com</a></p>
-    <p>GitHub: <a href="https://github.com/SupremeAdh" target="_blank">github.com/SupremeAdh</a></p>
+    <p>Email: adhikarisupreme36@gmail.com</p>
+    <p>GitHub: github.com/SupremeAdh</p>
 </section>
 
 <footer>
@@ -155,18 +122,39 @@ footer {
 </footer>
 
 <script>
-let score = 0;
+let secretNumber = Math.floor(Math.random() * 101); // 0 to 100
+let guessesLeft = 5;
+let gameOver = false;
 
-function increaseScore() {
-    score++;
-    document.getElementById("score").innerText = score;
+function checkGuess() {
+    if (gameOver) return;
 
-    if (score === 10) {
-        document.getElementById("message").innerText = "Nice! Keep going 🚀";
+    let userGuess = Number(document.getElementById("guess").value);
+
+    if (userGuess < 0 || userGuess > 100) {
+        document.getElementById("message").innerText = "Enter a number between 0 and 100.";
+        return;
     }
-    if (score === 20) {
-        document.getElementById("message").innerText = "Great job! 🎉";
+
+    guessesLeft--;
+    document.getElementById("left").innerText = guessesLeft;
+
+    if (userGuess === secretNumber) {
+        document.getElementById("message").innerText =
+            "🎉 Correct! Refresh the page to play again.";
+        gameOver = true;
+    } else if (guessesLeft === 0) {
+        document.getElementById("message").innerText =
+            "❌ Game over! The number was " + secretNumber +
+            ". Refresh the page to try again.";
+        gameOver = true;
+    } else if (userGuess > secretNumber) {
+        document.getElementById("message").innerText = "Too high!";
+    } else {
+        document.getElementById("message").innerText = "Too low!";
     }
+
+    document.getElementById("guess").value = "";
 }
 </script>
 
